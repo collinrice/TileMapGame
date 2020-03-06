@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <script type="text/javascript">
+        var ECS = {};
+        ECS.Components = {};
+        ECS.systems = {};
+        var entities = {};
+
+        //Entities
+        ECS.Entity = function Entity() {
+            this.id = ECS.Entity.prototype._count;
+            ECS.Entity.prototype._count++;
+            this.components = {};
+            return this;
+        };
+
+        ECS.Entity.prototype._count = 0;
+
+        ECS.Entity.prototype.addComponent = function addComponent(component) {
+            this.components[component.name] = component;
+            return this;
+        };
+
+        ECS.Entity.prototype.removeComponent = function removeComponent(componentName) {
+            var name = componentName;
+
+            if (typeof componentName === 'function') {
+                name = componentName.prototype.name;
+            }
+
+            delete this.components[name];
+            return this;
+        };
+
+        ECS.Entity.prototype.print = function print() {
+            console.log(JSON.stringify(this, null, 4));
+            return this;
+        };
+
+        //Components
+        ECS.Components.Health = function componentHealth(value) {
+            this.value = value;
+            return this;
+        };
+        ECS.Components.Health.prototype.name = 'health';
+
+        //Systems
+
+
+
+        //Test area
+        var entity = new ECS.Entity();
+        entity.addComponent(new ECS.Components.Health(25));
+        entity.print();
+    </script>
+</head>
+
+<body></body></html>
