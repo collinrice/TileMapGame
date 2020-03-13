@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body onload="updateResourceBar()">
+    <div id="resourceBar">Pop:<span id="pop">0/0</span> Food:<span id="food">0</span> Sci:<span id="sci">0</span></div>
+    <div id="ui">
+        Farmers: <input type="number" id="farmers" min="0" max="99"><br>
+        Scientists: <input type="number" id="scientists" min="0" max="99">
+    </div>
+    <button onclick="endTurn()">End Turn</button>
+
+    <!--Code Below-->
+    <script type="text/javascript">
+        //Global Vars
+        var gameData = {
+            population: {
+                max: 5,
+                now: 5,
+                scientists: 0,
+                farmers: 0
+            },
+            production: { //Values are per worker assigned
+                science: 1,
+                food: 1
+            },
+            resources: {
+                science: 0,
+                food: 30
+            }
+        }
+
+        //Game Systems
+        function endTurn() {
+            if (validateInput()) {
+                gameData.population.farmers = $("farmers").value;
+                gameData.population.scientists = $("scientists").value;
+                var foodProduced = gameData.population.farmers * gameData.production.food;
+                var sciProduced = gameData.population.scientists * gameData.production.science;
+                gameData.resources.food += foodProduced;
+                gameData.resources.science += sciProduced;
+                updateResourceBar();
+                console.dir(gameData);
+            }
+        }
+
+        function validateInput() {
+            if ($('farmers').value + $('scientists').value > gameData.population.now) {
+                window.alert("You don't have that many people");
+                /*$('farmers').value = gameData.population.farmers;
+$('scientists').value = gameData.population.scientists;*/
+            } else {
+                return true;
+            }
+        }
+
+        //Helper Functions
+        var $ = function(id) {
+            return document.getElementById(id);
+        };
+
+        function updateResourceBar() {
+            $('pop').innerHTML = gameData.population.now + "/" + gameData.population.max;
+            $('food').innerHTML = gameData.resources.food;
+            $('sci').innerHTML = gameData.resources.science;
+        }
+    </script>
+</body></html>

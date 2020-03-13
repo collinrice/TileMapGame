@@ -8,7 +8,9 @@
 </head>
 
 <body>
-    <canvas id='myCanvas' width='300' height='300' style='position:absolute; left:0; top:0'></canvas>
+    <canvas id='myCanvas' width='300' height='300'></canvas>
+    <button onclick="logArrays()">Render</button>
+    <button onclick="endTurn()">End Turn</button>
     <!--Code starts below-->
     <!--    <script src="settings.js"></script>
     <script src="tileTypes.js"></script>
@@ -20,6 +22,15 @@
             mapRows: 8,
             mapCols: 8
         };
+
+        var game = {
+            food: 0,
+            money: 0
+        }
+
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2D');
+
 
         //Create tile map for terrain tiles
         var terTiles = [];
@@ -39,24 +50,42 @@
             }
         }
 
-        var canvas = document.getElementById('myCanvas');
-        var ctx = canvas.getContext('2D');
-
-        renderTerrain();
 
         function renderTerrain() {
             for (var i = 0; i < config.mapRows; i++) {
                 for (var j = 0; j < config.mapCols; j++) {
                     var tile = terTiles[i][j];
-                    if (1 === 1) {
-                        //tile = plains.img;
-                        var img = new Image();
-                        img.src = 'plains.png';
-                    }
+
+                    var img = new Image();
+                    img.src = 'plains.png';
+
                     var targetX = j * config.tWidth;
                     var targetY = i * config.tHeight;
-                    ctx.drawImage(tile, targetX, targetY);
+                    ctx.drawImage(img, targetX, targetY);
                 }
+            }
+        }
+
+        function logArrays() {
+            console.dir(terTiles);
+            console.dir(infTiles);
+            console.dir(game);
+        }
+
+        function endTurn() {
+            for (i = 0; i < config.mapRows; i++) {
+                for (j = 0; j < config.mapCols; j++) {
+                    var tile = infTiles[i][j];
+                    if (tile === 0) {
+                        tileTypes.farm();
+                    }
+                }
+            }
+        }
+
+        var tileTypes = {
+            farm: function() {
+                game.food += 10;
             }
         }
     </script>
